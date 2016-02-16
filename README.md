@@ -1,4 +1,4 @@
-A2zBuild
+A2ZBuild
 ========
 
 .Net solutions that are built using the ruby gem albacore and use semantic versioning via semver have verbosity and bloated rake files with some boiler plate that can be reduced and simplified. There are also configuration transforms that can be applied per deployable environment before projects are built. This gem a2zbuild provides those functions.
