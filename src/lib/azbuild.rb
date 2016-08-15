@@ -1,11 +1,11 @@
 require_relative 'install.rb'
-require_relative 'transform.rb'
 require_relative 'build.rb'
 require_relative 'dependency.rb'
+#require_relative 'package.rb'
 
 # installation
 installers = [
-  'ruby', 'devkit', 'gems'
+  'ruby', 'gems'
 ]
 
 installers.each { |method|
@@ -14,7 +14,6 @@ installers.each { |method|
 
 require 'rubygems'
 require 'nokogiri'
-require 'azure'
 
 # includes for rake build
 include FileTest

@@ -108,7 +108,7 @@ def set_solution_version(asm)
   set_version asm, $version_map[:platform_version], $version_map[:platform_version], $version_map[:platform_build_version], 'Solution'
 end
 
-def set_version(asm, version, file_version, assembly_version, output_file)
+def set_version asm, version, file_version, assembly_version, output_file
   # Assembly file config
   asm.product_name = PRODUCT
   asm.description = PRODUCT_DESCRIPTION
@@ -123,7 +123,7 @@ def set_version(asm, version, file_version, assembly_version, output_file)
 end
 
 # checks nuget dependency
-def check_package_version_dependency(package_uri, package, version='IsLatestVersion')
+def check_package_version_dependency package_uri, package, version='IsLatestVersion'
   # retrieve package version info
   response = Net::HTTP.get_response(URI.parse(package_uri.sub('pkg', package))) # get_response takes a URI object
   package_info = response.body
@@ -151,7 +151,7 @@ def check_package_version_dependency(package_uri, package, version='IsLatestVers
   return true
 end
 
-def copy_runtime_artifacts(package)
+def copy_runtime_artifacts package
 
   # grab all packages.config files
   config_files = Dir.glob('**/packages.config')
@@ -174,4 +174,23 @@ def copy_runtime_artifacts(package)
   puts source
   puts dest
   copy_output_files source, "*.*", dest
+end
+
+def run_vsconsolse_tests settings, assemblies = nil
+
+  raise 'Settings file name is required' if settings.nil?
+
+  if assemblies.nil?
+    assemblies = FileList["**/*.Tests.dll"]
+    filelist = assemblies.map { |assembly| File.join(Dir.pwd, assembly)}
+  end
+
+  test_runner :tests do |tests|
+    tests.files = filelist
+    tests.exe = 'C:/Program Files (x86)/Microsoft Visual Studio 14.0/Common7/IDE/CommonExtensions/Microsoft/TestWindow/VSTest.console.exe'
+    tests.add_parameter '/InIsolation'
+    tests.add_parameter '/Logger:trx'
+    tests.add_parameter "/Settings:#{Dir.pwd}/#{settings}.runsettings"
+  end
+
 end

@@ -1,11 +1,11 @@
-A2ZBuild
+azbuild
 ========
 
-.Net solutions that are built using the ruby gem albacore and use semantic versioning via semver have verbosity and bloated rake files with some boiler plate that can be reduced and simplified. There are also configuration transforms that can be applied per deployable environment before projects are built. This gem a2zbuild provides those functions.
+.Net solutions that are built using the ruby gem albacore and use semantic versioning via semver have verbosity and bloated rake files with some boiler plate that can be reduced and simplified. There are also configuration transforms that can be applied per deployable environment before projects are built. This gem azbuild provides those functions.
 
 The gem also simplifies ruby version and gem dependencies by bootstrapping itself to detect and install right gem versions. This may soon chnage to use bundler in future.
 
-<b>Note: </b>a2zbuild is the next evolution of <b>azdeploy</b> gem that is available on http://rubygems.org
+<b>Note: </b>azbuild is the next evolution of <b>azdeploy</b> gem that is available on http://rubygems.org
 
 <b>Where do configuration values come from?</b>
 
@@ -13,7 +13,7 @@ Currently, configuration key value pairs for specific transforms are stored and 
 
 <b>How to use the gem</b>
 
-a2zbuild is in development and you'll need to use azdeploy until a2zbuild development is complete.
+azbuild is in development and you'll need to use azdeploy until azbuild development is complete.
 
 To start using azdeploy, 
 
@@ -85,7 +85,7 @@ task :default => [:clean, :transform_config, :restore, :compile, :package, :publ
 
 ```
 
-Instructions for a2zbuild when it's ready:
+Instructions for azbuild when it's ready:
 
 1. Install latest version of Ruby
 2. Install the gem from http://rubygems.org
