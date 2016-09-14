@@ -1,7 +1,9 @@
+require_relative 'colorize.rb'
 require_relative 'install.rb'
 require_relative 'build.rb'
 require_relative 'dependency.rb'
-#require_relative 'package.rb'
+require_relative 'versioning.rb'
+require_relative 'package.rb'
 
 # installation
 installers = [
@@ -12,7 +14,7 @@ installers.each { |method|
   exit if !send("check_#{method}")
 }
 
-require 'rubygems'
+#require 'rubygems'
 require 'nokogiri'
 
 # includes for rake build
