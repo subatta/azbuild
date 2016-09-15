@@ -25,11 +25,19 @@ def read_versions
     v = SemVer.new
     v.load file
     v.patch = (ENV['BUILD_NUMBER'] || v.patch).to_i
+    version = versions(v, &method(:commit_data))
+
     sm = SemVerMetadata.new file
     assemblies = sm.assemblies
     sm.assemblies.each { |a|
-      $version_map[a] = versions(v, &method(:commit_data))
+      $version_map[a] = version
     }
+
+    name = file
+      .gsub(/.semver/, '')
+      .gsub('/', '')
+
+    $version_map[name] = version
   }
 
   # this is for assemblies not versioned with semver
