@@ -25,12 +25,11 @@ def read_versions
     v = SemVer.new
     v.load file
     v.patch = (ENV['BUILD_NUMBER'] || v.patch).to_i
-	  name = file
-		  .to_s
-		  .gsub('.semver', '')
-	    .gsub('/', '')
-    version_data = versions(v, &method(:commit_data))
-    $version_map[name] = version_data
+    sm = SemVerMetadata.new file
+    assemblies = sm.assemblies
+    sm.assemblies.each { |a|
+      $version_map[a] = versions(v, &method(:commit_data))
+    }
   }
 
   # this is for assemblies not versioned with semver
@@ -72,37 +71,37 @@ def update_assembly_versions
 end
 
 def self.versions semver, &commit_data
-{
-  # just a monotonic inc
-  :build_number   => semver.patch,
-  :semver         => semver,
+  {
+    # just a monotonic inc
+    :build_number   => semver.patch,
+    :semver         => semver,
 
-  # purely M.m.p format
-  :formal_version => "#{ XSemVer::SemVer.new(semver.major, semver.minor, semver.patch).format "%M.%m.%p"}",
+    # purely M.m.p format
+    :formal_version => "#{ XSemVer::SemVer.new(semver.major, semver.minor, semver.patch).format "%M.%m.%p"}",
 
-  # four-numbers version, useful if you're dealing with COM/Windows
-  :long_version   => "#{semver.format '%M.%m.%p'}.0",
+    # four-numbers version, useful if you're dealing with COM/Windows
+    :long_version   => "#{semver.format '%M.%m.%p'}.0",
 
-  # extensible number w/ git hash
-  :build_version  => semver.format("%M.%m.%p%s") + ".#{yield[0]}",
+    # extensible number w/ git hash
+    :build_version  => semver.format("%M.%m.%p%s") + ".#{yield[0]}",
 
-  # nuget (not full semver 2.0.0 support) see http://nuget.codeplex.com/workitem/1796
-  :nuget_version  => format_nuget(semver)
-}
+    # nuget (not full semver 2.0.0 support) see http://nuget.codeplex.com/workitem/1796
+    :nuget_version  => format_nuget(semver)
+  }
 end
 
 def self.versions_no_semver &commit_data
-dt_ver = Time.new.strftime('%y.%-m.%-d') + ".#{(ENV['BUILD_NUMBER'] || '0')}"
-{
+  dt_ver = Time.new.strftime('%y.%-m.%-d') + ".#{(ENV['BUILD_NUMBER'] || '0')}"
+  {
 
-  :formal_version => dt_ver,
+    :formal_version => dt_ver,
 
-  # four-numbers version, useful if you're dealing with COM/Windows
-  :long_version   => dt_ver,
+    # four-numbers version, useful if you're dealing with COM/Windows
+    :long_version   => dt_ver,
 
-  # extensible number w/ git hash
-  :build_version  => dt_ver + ".#{yield[0]}"
-}
+    # extensible number w/ git hash
+    :build_version  => dt_ver + ".#{yield[0]}"
+  }
 end
 
 def self.format_nuget semver

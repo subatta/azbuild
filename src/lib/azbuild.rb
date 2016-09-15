@@ -1,4 +1,4 @@
-require_relative 'colorize.rb'
+require_relative 'string_extensions.rb'
 require_relative 'install.rb'
 require_relative 'build.rb'
 require_relative 'versioning.rb'
@@ -21,3 +21,4 @@ require 'nokogiri'
 include FileTest
 require 'albacore'
 require 'semver'
+require 'json'

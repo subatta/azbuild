@@ -68,4 +68,15 @@ class String
 	def reverse_color
 	  "\e[7m#{self}\e[27m" 
 	end
+
+	def expand_with list
+		out = []
+		list.each{ |i|
+			f = self + '.' + i
+			if File.exists? f
+				out << f
+			end
+		}
+		out
+	end
 end
