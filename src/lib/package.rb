@@ -5,11 +5,11 @@ def nuget_pack id, config, artifact_path
 
   p.configuration = BUILD_CONFIG
 
-  if !config.has_key? :project || config[:project] == ''
+  if !config.has_key? :projects || config[:projects] == ''
     raise 'At least one project is required to build'.red
   end
 
-  p.files = config[:project]
+  p.files = config[:projects]
 
   if config.has_key? :nuspec && config[:nuspec] != ''
     p.nuspec = config[:nuspec]
