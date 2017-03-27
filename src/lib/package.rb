@@ -3,74 +3,62 @@ def nuget_pack id, config, artifact_path
 
   p = Albacore::NugetsPack::Config.new
 
-  p.configuration = BUILD_CONFIG
-
-  if !config.has_key? :projects || config[:projects] == ''
-    raise 'At least one project is required to build'.red
-  end
-
-  p.files = config[:projects]
+  p.configuration = config[:build_config]
 
   if config.has_key? :nuspec && config[:nuspec] != ''
     p.nuspec = config[:nuspec]
+  else
+    if !config.has_key? :projects || config[:projects] == ''
+      raise 'At least one project is required to build'.red
+    else
+      p.files = config[:projects]
+    end
+    
+    p.with_package do |p|
+      if config.has_key? :files
+        config[:files].each { |folder, files|
+          files.map!{ |x| 
+            "#{config[:path]}/#{config[:company]}.#{x}".expand_with(['dll','pdb','xml'])
+          }
+          files = files.flatten
+
+          files.each{ |file|
+            p.add_file file, folder
+          }
+        }
+      end
+    end
   end
 
   p.out = artifact_path
 
   p.with_metadata do |m|
     m.id = id
-    m.title = PRODUCT
-    m.description = PRODUCT_DESCRIPTION
-    m.authors = COMPANY
+    m.title = config[:title]
+    m.description = config[:description]
+    m.copyright = config[:copyright]
+    m.authors = config[:authors]
     m.version = config[:version]
     if config.has_key? :dependencies
       config[:dependencies].each { |name, version|
         m.add_dependency name, version
       }
     end
-  end
-
-  p.target = config[:target_framework]
-  p.with_package do |p|
-    if config.has_key? :files
-      config[:files].each { |folder, files|
-        files.each{ |file|
-          p.add_file file, folder
-        }
+    if config.has_key? :framework_dependencies
+      config[:framework_dependencies].each { |name, version|
+        m.add_framework_dependency name, version
       }
-    end
+    end 
   end
+ 
+  p.target = config[:target_framework]
   
-  p.gen_symbols
+  #p.gen_symbols
   p.nuget_gem_exe
+
   #p.leave_nuspec
-
+  puts 'Nuget configuration set complete. Creating nuget...'
   Albacore::NugetsPack::ProjectTask.new(p.opts).execute
+  puts 'Nuget created'
+
 end
-
-def nuget_content nuget_name, path, dotnet_ver
-
-  content = {}
-
-  metadata = SemVerMetadata.new ".semver/#{nuget_name}.semver"
-
-  content[:files] = {}
-  content[:files]['lib'] = metadata.files
-
-  file_names = metadata.assemblies.map{ |x|
-    "#{path}/#{x}"
-  }
-  assemblies = []
-  file_names.each{ |file|
-    assemblies.concat(file.expand_with(['dll','pdb','xml']))
-  }
-  content[:files]['lib'].concat assemblies
-
-  content[:dependencies] = metadata.depends
-
-  content[:version] = read_versions[nuget_name][:nuget_version]
-  content[:target_framework] = dotnet_ver
-
-  content
-end
-

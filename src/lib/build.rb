@@ -67,21 +67,21 @@ def cleantask props
   end
 end
 
-def run_vsconsole_tests settings, params = nil, assemblies = nil
+def run_vsconsole_tests settings, outdir, params = nil, assemblies = nil
 
   raise 'Settings file name is required' if settings.nil?
 
   if assemblies.nil?
-    assemblies = FileList["**/#{OUTPUT_PATH}/*.Tests.dll"]
+    assemblies = FileList["**/#{outdir}/**/*.Tests.dll"]
     filelist = assemblies.map { |assembly| File.join(Dir.pwd, assembly)}
   end
 
   test_runner :tests do |tests|
     tests.files = filelist
-    tests.exe = 'C:/Program Files (x86)/Microsoft Visual Studio 14.0/Common7/IDE/CommonExtensions/Microsoft/TestWindow/VSTest.console.exe'
+    tests.exe = "C:/Program\ Files\ (x86)/Microsoft\ Visual\ Studio\ 14.0/Common7/IDE/CommonExtensions/Microsoft/TestWindow/VSTest.console.exe"
     if (params != nil)
       params.each { | p |
-        tests.add_parameter p 
+        tests.add_parameter p
       }
     end
     tests.add_parameter '/InIsolation'
