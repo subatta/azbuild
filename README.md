@@ -1,7 +1,7 @@
 azbuild
 ========
 
-.Net solutions that are built using the ruby gem albacore and use semantic versioning via semver have verbosity and bloated rake files with some boiler plate that can be reduced and simplified. There are also configuration transforms that can be applied per deployable environment before projects are built. This gem azbuild provides those functions.
+.Net solutions that are built using the ruby gem [albacore](https://github.com/Albacore/albacore) and use semantic versioning via semver. These scripts tend to have verbosity and bloated rake files with boiler plate code that can be reduced and simplified. There are also configuration transforms that can be applied per deployable environment before projects are built. This gem azbuild provides those functions.
 
 The gem also simplifies ruby version and gem dependencies by bootstrapping itself to detect and install right gem versions. This may soon chnage to use bundler in future.
 
@@ -19,7 +19,7 @@ Running the rake script from above will kick-off the install sequence and instal
 
 A typical build would perform the following steps:
 
-![](https://github.com/subatta/azbuild/images/build_steps.png)
+![](https://github.com/subatta/azbuild/src/images/build_steps.png)
 
 1. Clean solution build output folders
 2. Restore nuget packages
