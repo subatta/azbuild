@@ -15,6 +15,22 @@ def get_commit_hash_and_date
   [commit, commit_date]
 end
 
+# read version info from solutioninfo.cs file
+def read_solution_version
+  version = ''
+  File.open('SolutionInfo.cs', 'r').each_line do |line|
+    if line.include?('AssemblyVersion')
+      version = line[/\(.*?\)/]
+      break
+    end
+  end
+  ver = SemVer.parse version
+  
+  $version_map[ASTER] = versions(ver, &method(:commit_data))
+
+  $version_map
+end
+
 # put semver versions in a map
 def read_versions
 
