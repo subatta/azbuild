@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name        = 'azbuild'
-  s.version     = '1.0.2'
-  s.date        = '2016-11-08'
+  s.version     = '1.0.3'
+  s.date        = '2017-03-27'
   s.summary     = 'Setup and scripting support for .Net project builds'
   s.description = 'Build, Configuration and Deployment Gem for .Net Solutions'
   s.authors     = ['Suresh Batta']
