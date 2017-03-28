@@ -19,7 +19,7 @@ Running the rake script from above will kick-off the install sequence and instal
 
 A typical build would perform the following steps:
 
-![](https://github.com/subatta/azbuild/src/images/build_steps.png)
+![](https://github.com/subatta/azbuild/blob/develop/src/images/build_steps.png)
 
 1. Clean solution build output folders
 2. Restore nuget packages
